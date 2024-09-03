@@ -1,20 +1,38 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import "@/global.css";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+
+import {
+  Karla_400Regular,
+  Karla_700Bold,
+  useFonts,
+} from "@expo-google-fonts/karla";
+
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+import { Text } from "./components/ui/text";
+import { Routes } from "./src/routes";
 
 export default function App() {
+  const [loaded, error] = useFonts({
+    Karla_400Regular,
+    Karla_700Bold,
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GluestackUIProvider mode="light">
+      <StatusBar backgroundColor="transparent" translucent />
+
+      <Routes />
+    </GluestackUIProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
